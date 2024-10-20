@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jul14an's Class - The Strongest Battlegrounds</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .admin-panel {
+            border: 1px solid #000;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f4f4f4;
+        }
+
+        .admin-panel h2 {
+            margin-top: 0;
+        }
+
+        input[type="file"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Basic styling for the admin message */
+        .admin-message {
+            font-weight: bold;
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome to Jul14an's Class</h1>
+        <p>In this class, we focus on mastering your 1v1 battles. Administrators can upload files related to the course.</p>
+
+        <!-- Admin Upload Panel -->
+        <div class="admin-panel" id="admin-panel" style="display:none;">
+            <h2>Admin Upload Section</h2>
+            <form action="upload.php" method="post" enctype="multipart/form-data">
+                <p><strong>Upload file for Jul14an's Class (Admins Only):</strong></p>
+                <input type="file" name="fileUpload" accept=".jpg, .jpeg, .png, .txt, .pdf">
+                <textarea name="textSubmission" rows="4" placeholder="Enter additional notes or instructions..."></textarea>
+                <input type="submit" value="Upload File">
+            </form>
+            <p class="admin-message">* Only administrators can upload files and enter text here.</p>
+        </div>
+
+        <!-- Message if not admin -->
+        <div id="non-admin-message" style="display:none;">
+            <p>You do not have admin privileges to upload files or submit content. Please contact the admin for more information.</p>
+        </div>
+    </div>
+
+    <script>
+        // Dummy function to simulate admin check
+        function checkAdminStatus() {
+            const isAdmin = true;  // Replace with actual admin check logic
+
+            if (isAdmin) {
+                document.getElementById('admin-panel').style.display = 'block';
+            } else {
+                document.getElementById('non-admin-message').style.display = 'block';
+            }
+        }
+
+        // Check if the user is an admin when the page loads
+        window.onload = checkAdminStatus;
+    </script>
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Check if the user is an admin (this would be more complex in real-life applications)
+    $isAdmin = true; // This should be dynamically set based on session or other methods
+
+    if ($isAdmin) {
+        $uploadDirectory = "uploads/";
+        $uploadFile = $uploadDirectory . basename($_FILES["fileUpload"]["name"]);
+
+        // Check if file was uploaded successfully
+        if (move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $uploadFile)) {
+            echo "The file has been uploaded.";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    } else {
+        echo "You are not authorized to upload files.";
+    }
+}
+?>
+
+</body>
+</html>
